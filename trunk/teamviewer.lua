@@ -151,6 +151,7 @@ function tv_proto.dissector (buf, pkt, root)
     local orig_data = data_tvb():bytes()
     local new_data = ByteArray.new()
     new_data:set_size(orig_data:len())
+    if orig_data > 0 then 
     for x=0,orig_data:len()-2 do
       local newc = bit.band((bit.lshift(orig_data:get_index(x), 1) + bit.rshift(orig_data:get_index(x+1), 7)), 0xff)
       new_data:set_index(x,newc)
@@ -159,6 +160,7 @@ function tv_proto.dissector (buf, pkt, root)
     new_data:set_index(orig_data:len()-1,newc)
     data_tvb = ByteArray.tvb(new_data, "Decoded Data")
   end
+end
 
   next_packet_offset = next_packet_offset+data_length
   local remaining_data = buf(next_packet_offset)
